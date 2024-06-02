@@ -29,7 +29,7 @@ def mock_requests_get(url):
 class TestWeatherApi(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patcher = patch('src.utils.WeatherApi.requests.get', side_effect=mock_requests_get)
+        cls.patcher = patch('app.utils.WeatherApi.requests.get', side_effect=mock_requests_get)
         cls.patcher.start()
         WeatherApi(api_key='')
 
