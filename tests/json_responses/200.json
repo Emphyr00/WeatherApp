@@ -1,0 +1,43 @@
+{
+    "coord": {
+        "lon": 19.4667,
+        "lat": 51.75
+    },
+    "weather": [
+        {
+            "id": 803,
+            "main": "Clouds",
+            "description": "broken clouds",
+            "icon": "04d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 20.5,
+        "feels_like": 20.63,
+        "temp_min": 20.41,
+        "temp_max": 20.42,
+        "pressure": 1010,
+        "humidity": 78
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 1.54,
+        "deg": 310
+    },
+    "clouds": {
+        "all": 75
+    },
+    "dt": 1717340153,
+    "sys": {
+        "type": 1,
+        "id": 1706,
+        "country": "PL",
+        "sunrise": 1717295313,
+        "sunset": 1717354328
+    },
+    "timezone": 7200,
+    "id": 3093133,
+    "name": "Łódź",
+    "cod": 200
+}
