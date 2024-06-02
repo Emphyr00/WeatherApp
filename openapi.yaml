@@ -1,0 +1,250 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "FastAPI", "version": "0.1.0" },
+  "paths":
+    {
+      "/weather/":
+        {
+          "get":
+            {
+              "summary": "Get Weather",
+              "description": "This endpoint allows to fetch data about weather in given city",
+              "operationId": "get_weather_weather__get",
+              "parameters":
+                [
+                  {
+                    "name": "city",
+                    "in": "query",
+                    "required": true,
+                    "schema":
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-zA-Z]+$",
+                        "description": "City name must be alphabetical and non-empty (do not use local alphabet letters, all those letters should be replaced with standard alphabet letters).",
+                        "title": "City",
+                      },
+                    "description": "City name must be alphabetical and non-empty (do not use local alphabet letters, all those letters should be replaced with standard alphabet letters).",
+                    "example": "lodz",
+                  },
+                ],
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Information about weather in given city containing: temperature (celcius), description of the weather, humidity (%) and wind speed (m/s).",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/WeatherResponse",
+                                },
+                            },
+                        },
+                    },
+                  "404":
+                    {
+                      "description": "City Not Found.",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/Error404Response",
+                                },
+                            },
+                        },
+                    },
+                  "401":
+                    {
+                      "description": "Unauthorized.",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/Error401Response",
+                                },
+                            },
+                        },
+                    },
+                  "409":
+                    {
+                      "description": "Response from OpenWeatherMap API can not be parsed correctly, the structure of the API response may have changed.",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/Error409Response",
+                                },
+                            },
+                        },
+                    },
+                  "422":
+                    {
+                      "description": "Validation Error",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/HTTPValidationError",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+  "components":
+    {
+      "schemas":
+        {
+          "Error401MassageDetail":
+            {
+              "properties":
+                {
+                  "cod": { "type": "string", "title": "Cod", "example": "401" },
+                  "message":
+                    {
+                      "type": "string",
+                      "title": "Message",
+                      "example": "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info.",
+                    },
+                },
+              "type": "object",
+              "required": ["cod", "message"],
+              "title": "Error401MassageDetail",
+            },
+          "Error401Response":
+            {
+              "properties":
+                {
+                  "message":
+                    { "$ref": "#/components/schemas/Error401MassageDetail" },
+                },
+              "type": "object",
+              "required": ["message"],
+              "title": "Error401Response",
+            },
+          "Error404MassageDetail":
+            {
+              "properties":
+                {
+                  "cod": { "type": "string", "title": "Cod", "example": "404" },
+                  "message":
+                    {
+                      "type": "string",
+                      "title": "Message",
+                      "example": "city not found",
+                    },
+                },
+              "type": "object",
+              "required": ["cod", "message"],
+              "title": "Error404MassageDetail",
+            },
+          "Error404Response":
+            {
+              "properties":
+                {
+                  "message":
+                    { "$ref": "#/components/schemas/Error404MassageDetail" },
+                },
+              "type": "object",
+              "required": ["message"],
+              "title": "Error404Response",
+            },
+          "Error409Response":
+            {
+              "properties":
+                {
+                  "error":
+                    {
+                      "type": "string",
+                      "title": "Error",
+                      "example": "Response from OpenWeatherMap API is not processable",
+                    },
+                  "message":
+                    {
+                      "type": "string",
+                      "title": "Message",
+                      "example": "Missing expected field: 'humidity'",
+                    },
+                },
+              "type": "object",
+              "required": ["error", "message"],
+              "title": "Error409Response",
+            },
+          "HTTPValidationError":
+            {
+              "properties":
+                {
+                  "detail":
+                    {
+                      "items":
+                        { "$ref": "#/components/schemas/ValidationError" },
+                      "type": "array",
+                      "title": "Detail",
+                    },
+                },
+              "type": "object",
+              "title": "HTTPValidationError",
+            },
+          "ValidationError":
+            {
+              "properties":
+                {
+                  "loc":
+                    {
+                      "items":
+                        {
+                          "anyOf":
+                            [{ "type": "string" }, { "type": "integer" }],
+                        },
+                      "type": "array",
+                      "title": "Location",
+                    },
+                  "msg": { "type": "string", "title": "Message" },
+                  "type": { "type": "string", "title": "Error Type" },
+                },
+              "type": "object",
+              "required": ["loc", "msg", "type"],
+              "title": "ValidationError",
+            },
+          "WeatherResponse":
+            {
+              "properties":
+                {
+                  "temperature":
+                    {
+                      "type": "number",
+                      "title": "Temperature",
+                      "example": 22.5,
+                    },
+                  "description":
+                    {
+                      "type": "string",
+                      "title": "Description",
+                      "example": "broken clouds",
+                    },
+                  "humidity":
+                    { "type": "number", "title": "Humidity", "example": 75.0 },
+                  "wind_speed":
+                    { "type": "number", "title": "Wind Speed", "example": 1.5 },
+                },
+              "type": "object",
+              "required":
+                ["temperature", "description", "humidity", "wind_speed"],
+              "title": "WeatherResponse",
+            },
+        },
+    },
+}
